@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Evaluación RED - Modelo LORI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f4f4f4;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+      background: #fff;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    th {
+      background-color: #2980b9;
+      color: white;
+    }
+    input[type="text"], input[type="url"] {
+      width: 100%;
+      padding: 5px;
+    }
+    .rating input {
+      margin-right: 5px;
+    }
+    .result {
+      background: #ecf0f1;
+      padding: 15px;
+      border: 1px solid #bdc3c7;
+    }
+    .btn {
+      background: #27ae60;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Evaluación de Recurso Educativo Digital</h1>
+
+  <h2>Datos del Recurso</h2>
+  <table>
+    <tr><th>Nombre del recurso educativo</th><td><input type="text" id="nombre" /></td></tr>
+    <tr><td>Área del conocimiento</td><td><input type="text" id="area" /></td></tr>
+    <tr><td>Objetivo de aprendizaje</td><td><input type="text" id="objetivo" /></td></tr>
+    <tr><td>URL del recurso educativo digital</td><td><input type="url" id="url" /></td></tr>
+  </table>
+
+  <h2>Descripción del recurso</h2>
+  <textarea id="descripcion" rows="4" style="width:100%"></textarea>
+
+  <h2>Evaluación según Modelo LORI</h2>
+  <p><strong>Escala:</strong> 1 (Muy bajo) a 5 (Muy alto)</p>
+  <table id="evaluacion">
+    <tr><th>Criterio</th><th>Descripción</th><th>Puntaje</th></tr>
+  </table>
+
+  <button class="btn" onclick="calcular()">Calcular Resultado</button>
+
+  <div class="result" id="resultado" style="display:none;">
+    <h2>Resultados</h2>
+    <p><strong>Puntaje total:</strong> <span id="puntaje"></span> / 60</p>
+    <p><strong>Calificación (escala 100):</strong> <span id="calificacion"></span></p>
+    <p><strong>Concepto:</strong> <span id="concepto"></span></p>
+  </div>
+
+  <script>
+    const criterios = [
+      ["Calidad del contenido", "Exactitud, claridad, actualidad y pertinencia del contenido."],
+      ["Alineación con los objetivos", "Contribución al logro de los resultados de aprendizaje."],
+      ["Retroalimentación y adaptación", "Ofrece retroalimentación significativa y se adapta al usuario."],
+      ["Motivación", "Capta y mantiene el interés del estudiante."],
+      ["Diseño de presentación", "Organización visual y estética del recurso."],
+      ["Usabilidad", "Facilidad de navegación y comprensión."],
+      ["Accesibilidad", "Accesible para usuarios con diversas condiciones."],
+      ["Reusabilidad", "Puede usarse en distintos contextos sin perder funcionalidad."],
+      ["Cumplimiento de estándares", "Conformidad con estándares técnicos y pedagógicos."],
+      ["Organización de la información", "Orden y estructura lógica."],
+      ["Expresión oral o simbólica", "Lenguaje adecuado al nivel educativo."],
+      ["Nitidez", "Claridad en imágenes, sonidos o ambos."]
+    ];
+
+    const tabla = document.getElementById("evaluacion");
+    criterios.forEach(([criterio, descripcion], i) => {
+      const fila = document.createElement("tr");
+      fila.innerHTML = `
+        <td>${criterio}</td>
+        <td>${descripcion}</td>
+        <td>
+          <select id="c${i}" class="rating">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3" selected>3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </td>
+      `;
+      tabla.appendChild(fila);
+    });
+
+    function calcular() {
+      let total = 0;
+      for (let i = 0; i < criterios.length; i++) {
+        total += parseInt(document.getElementById(`c${i}`).value);
+      }
+      const calificacion = (total * 100 / 60).toFixed(2);
+      let concepto = "";
+      if (calificacion < 40) concepto = "CALIDAD INSUFICIENTE";
+      else if (calificacion < 60) concepto = "CALIDAD BAJA";
+      else if (calificacion < 80) concepto = "CALIDAD ACEPTABLE";
+      else if (calificacion < 90) concepto = "CALIDAD ALTA";
+      else concepto = "CALIDAD MUY ALTA";
+
+      document.getElementById("puntaje").textContent = total;
+      document.getElementById("calificacion").textContent = calificacion;
+      document.getElementById("concepto").textContent = concepto;
+      document.getElementById("resultado").style.display = "block";
+    }
+  </script>
+
+<br>
+
+<Marquee><p><center><Font face="Cooper" Size="+2">Herramienta realizada por: Elisabeth Sarmiento</font></center></p></Marquee>
+</body>
+</html>
